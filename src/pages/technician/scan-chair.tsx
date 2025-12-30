@@ -6,7 +6,7 @@ import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
 import { theme } from 'styles/theme';
 import { QRScanner } from 'components/QRScanner';
-import { PhotoUpload } from 'components/PhotoUpload';
+import { PhotoUpload, UploadedPhoto } from 'components/PhotoUpload';
 import { Chair, ChairServiceEntry, Service, Part } from 'types/chair-care';
 import { doc, getDoc, updateDoc, addDoc, collection, serverTimestamp, getDocs } from 'firebase/firestore';
 import { db } from 'lib/firebase';
@@ -278,8 +278,8 @@ const ScanChair: NextPage = () => {
   const router = useRouter();
   const [chair, setChair] = useState<Chair | null>(null);
   const [loading, setLoading] = useState(false);
-  const [beforePhotos, setBeforePhotos] = useState<PhotoFile[]>([]);
-  const [afterPhotos, setAfterPhotos] = useState<PhotoFile[]>([]);
+  const [beforePhotos, setBeforePhotos] = useState<UploadedPhoto[]>([]);
+  const [afterPhotos, setAfterPhotos] = useState<UploadedPhoto[]>([]);
   const [formData, setFormData] = useState({
     issueReported: '',
     issueFound: '',
@@ -338,26 +338,9 @@ const ScanChair: NextPage = () => {
     }));
   };
 
-  const uploadPhotos = async (photos: PhotoFile[]): Promise<string[]> => {
-    // In a real implementation, you'd upload to cloud storage (AWS S3, Cloudinary, etc.)
-    // For now, we'll simulate the upload and return mock URLs
-    const uploadedUrls: string[] = [];
-    
-    for (const photo of photos) {
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // In real implementation:
-      // const formData = new FormData();
-      // formData.append('file', photo.file);
-      // const response = await fetch('/api/upload-photo', { method: 'POST', body: formData });
-      // const { url } = await response.json();
-      
-      // For now, use the blob URL (in production, this would be a cloud storage URL)
-      uploadedUrls.push(photo.url);
-    }
-    
-    return uploadedUrls;
+  const uploadPhotos = async (photos: UploadedPhoto[]): Promise<string[]> => {
+    // Photos are already uploaded, just return their URLs
+    return photos.map(photo => photo.url);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -530,11 +513,12 @@ const ScanChair: NextPage = () => {
               </FormGroup>
 
               <FormGroup>
+                <Label>Before Photos</Label>
                 <PhotoUpload
-                  label="Before Photos"
-                  photos={beforePhotos}
+                  existingPhotos={beforePhotos}
                   onPhotosChange={setBeforePhotos}
                   maxPhotos={5}
+                  category="before"
                 />
               </FormGroup>
 
@@ -578,11 +562,12 @@ const ScanChair: NextPage = () => {
               </FormGroup>
 
               <FormGroup>
+                <Label>After Photos</Label>
                 <PhotoUpload
-                  label="After Photos"
-                  photos={afterPhotos}
+                  existingPhotos={afterPhotos}
                   onPhotosChange={setAfterPhotos}
                   maxPhotos={5}
+                  category="after"
                 />
               </FormGroup>
 
