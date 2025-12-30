@@ -1,0 +1,381 @@
+/* Accessibility Styles for Chair Care */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 9999;
+  font-weight: bold;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast mode */
+.high-contrast {
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-inverse: #ffffff;
+  --background-primary: #ffffff;
+  --background-secondary: #f0f0f0;
+  --border-primary: #000000;
+  --border-secondary: #666666;
+  --primary-500: #0000ff;
+  --primary-600: #0000cc;
+  --success-500: #008000;
+  --error-500: #ff0000;
+  --warning-500: #ff8c00;
+}
+
+.high-contrast * {
+  border-color: var(--border-primary) !important;
+}
+
+.high-contrast button,
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 2px solid var(--border-primary) !important;
+  background: var(--background-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.high-contrast button:hover,
+.high-contrast button:focus {
+  background: var(--text-primary) !important;
+  color: var(--text-inverse) !important;
+}
+
+.high-contrast a {
+  color: var(--primary-500) !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast a:hover,
+.high-contrast a:focus {
+  background: var(--primary-500) !important;
+  color: var(--text-inverse) !important;
+}
+
+/* Reduced motion */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Font size adjustments */
+:root {
+  --base-font-size: 16px;
+}
+
+html {
+  font-size: var(--base-font-size);
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+.high-contrast *:focus {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+}
+
+/* Screen reader mode enhancements */
+.screen-reader-mode {
+  /* Ensure all interactive elements have proper labels */
+}
+
+.screen-reader-mode button:not([aria-label]):not([aria-labelledby]):empty::after {
+  content: "Unlabeled button";
+  position: absolute;
+  left: -9999px;
+}
+
+.screen-reader-mode img:not([alt])::after {
+  content: "Image without description";
+  position: absolute;
+  left: -9999px;
+}
+
+/* Keyboard navigation enhancements */
+.keyboard-user *:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* Touch target sizes for mobile accessibility */
+@media (max-width: 768px) {
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure form inputs are large enough */
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Color contrast improvements */
+.low-contrast-warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+/* Language-specific adjustments */
+[lang="af"] {
+  /* Afrikaans specific styles if needed */
+}
+
+[lang="zu"] {
+  /* Zulu specific styles if needed */
+}
+
+[lang="xh"] {
+  /* Xhosa specific styles if needed */
+}
+
+/* Print accessibility */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Ensure good contrast in print */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  
+  /* Show URLs for links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  /* Don't show URLs for fragment identifiers or javascript */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+}
+
+/* Error and success message accessibility */
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.success-message {
+  color: #2e7d32;
+  background: #e8f5e8;
+  border: 1px solid #c8e6c9;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.high-contrast .error-message {
+  color: #000000;
+  background: #ffffff;
+  border: 2px solid #ff0000;
+}
+
+.high-contrast .success-message {
+  color: #000000;
+  background: #ffffff;
+  border: 2px solid #008000;
+}
+
+/* Loading states accessibility */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.reduced-motion .loading-spinner {
+  animation: none;
+}
+
+.reduced-motion .loading-spinner::after {
+  content: "Loading...";
+  position: absolute;
+  left: -9999px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form validation accessibility */
+.form-field.error input,
+.form-field.error select,
+.form-field.error textarea {
+  border-color: #d32f2f;
+  background-color: #ffebee;
+}
+
+.form-field.error .field-error {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.high-contrast .form-field.error input,
+.high-contrast .form-field.error select,
+.high-contrast .form-field.error textarea {
+  border: 2px solid #ff0000;
+  background-color: #ffffff;
+}
+
+/* Modal accessibility */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.reduced-motion .modal {
+  transform: translate(-50%, -50%);
+  transition: none;
+}
+
+/* Table accessibility */
+.accessible-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.accessible-table th,
+.accessible-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.accessible-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.high-contrast .accessible-table th,
+.high-contrast .accessible-table td {
+  border: 1px solid #000000;
+}
+
+.high-contrast .accessible-table th {
+  background-color: #ffffff;
+}
+
+/* Responsive text scaling */
+@media (max-width: 768px) {
+  html {
+    font-size: calc(var(--base-font-size) * 1.1);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: calc(var(--base-font-size) * 1.2);
+  }
+}
+
+/* Ensure sufficient color contrast for status indicators */
+.status-active {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.status-inactive {
+  background-color: #f44336;
+  color: #ffffff;
+}
+
+.status-pending {
+  background-color: #ff9800;
+  color: #000000;
+}
+
+.high-contrast .status-active {
+  background-color: #008000;
+  color: #ffffff;
+  border: 1px solid #000000;
+}
+
+.high-contrast .status-inactive {
+  background-color: #ff0000;
+  color: #ffffff;
+  border: 1px solid #000000;
+}
+
+.high-contrast .status-pending {
+  background-color: #ffff00;
+  color: #000000;
+  border: 1px solid #000000;
+}
