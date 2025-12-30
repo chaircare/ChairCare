@@ -8,6 +8,7 @@ import {
   ROIAnalysis,
   DateRange
 } from 'types/business-intelligence';
+import { Job } from 'types/chair-care';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -57,13 +58,13 @@ export class BusinessIntelligenceService {
       collection(db, 'jobs'),
       where('completedAt', '>=', period.startDate),
       where('completedAt', '<=', period.endDate),
-      where('status', '==', 'completed')
+      where('status', '==', 'Completed')
     );
     
     const jobsSnapshot = await getDocs(jobsQuery);
     const totalRevenue = jobsSnapshot.docs.reduce((sum, doc) => {
       const job = doc.data();
-      return sum + (job.totalAmount || 0);
+      return sum + (job.finalPrice || job.priceBreakdown?.total || 0);
     }, 0);
     
     // Calculate previous period for trend
@@ -72,13 +73,13 @@ export class BusinessIntelligenceService {
       collection(db, 'jobs'),
       where('completedAt', '>=', previousPeriod.startDate),
       where('completedAt', '<=', previousPeriod.endDate),
-      where('status', '==', 'completed')
+      where('status', '==', 'Completed')
     );
     
     const previousJobsSnapshot = await getDocs(previousJobsQuery);
     const previousRevenue = previousJobsSnapshot.docs.reduce((sum, doc) => {
       const job = doc.data();
-      return sum + (job.totalAmount || 0);
+      return sum + (job.finalPrice || job.priceBreakdown?.total || 0);
     }, 0);
     
     const trendPercentage = previousRevenue > 0 
@@ -111,7 +112,7 @@ export class BusinessIntelligenceService {
       collection(db, 'jobs'),
       where('createdAt', '>=', period.startDate),
       where('createdAt', '<=', period.endDate),
-      where('status', '==', 'completed')
+      where('status', '==', 'Completed')
     );
     
     const [allJobsSnapshot, completedJobsSnapshot] = await Promise.all([
@@ -179,17 +180,17 @@ export class BusinessIntelligenceService {
       collection(db, 'jobs'),
       where('completedAt', '>=', period.startDate),
       where('completedAt', '<=', period.endDate),
-      where('status', '==', 'completed')
+      where('status', '==', 'Completed')
     );
     
     const jobsSnapshot = await getDocs(jobsQuery);
     let totalRevenue = 0;
-    let totalCosts = 0;
+    let totalCosts = 0; // Note: Jobs don't track costs directly, this would need to be calculated differently
     
     jobsSnapshot.docs.forEach(doc => {
       const job = doc.data();
-      totalRevenue += job.totalAmount || 0;
-      totalCosts += job.totalCosts || 0;
+      totalRevenue += job.finalPrice || job.priceBreakdown?.total || 0;
+      // totalCosts would need to be calculated from parts, labor, etc.
     });
     
     const profitMargin = totalRevenue > 0 ? ((totalRevenue - totalCosts) / totalRevenue) * 100 : 0;
@@ -214,7 +215,7 @@ export class BusinessIntelligenceService {
       collection(db, 'jobs'),
       where('completedAt', '>=', period.startDate),
       where('completedAt', '<=', period.endDate),
-      where('status', '==', 'completed')
+      where('status', '==', 'Completed')
     );
     
     const jobsSnapshot = await getDocs(jobsQuery);
@@ -284,12 +285,12 @@ export class BusinessIntelligenceService {
     const jobsQuery = query(
       collection(db, 'jobs'),
       where('clientId', '==', clientId),
-      where('status', '==', 'completed'),
+      where('status', '==', 'Completed'),
       orderBy('completedAt')
     );
     
     const jobsSnapshot = await getDocs(jobsQuery);
-    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const jobs: Job[] = jobsSnapshot.docs.map(doc => ({ ...doc.data() as Job, id: doc.id }));
     
     if (jobs.length === 0) {
       return {
@@ -311,8 +312,8 @@ export class BusinessIntelligenceService {
     const totalRevenue = jobs.reduce((sum, job) => sum + (job.finalPrice || job.priceBreakdown?.total || 0), 0);
     const totalJobs = jobs.length;
     const averageJobValue = totalRevenue / totalJobs;
-    const firstJobDate = new Date(jobs[0].completedAt);
-    const lastJobDate = new Date(jobs[jobs.length - 1].completedAt);
+    const firstJobDate = new Date(jobs[0].completedAt || jobs[0].createdAt);
+    const lastJobDate = new Date(jobs[jobs.length - 1].completedAt || jobs[jobs.length - 1].createdAt);
     
     const monthsActive = Math.max(1, 
       (lastJobDate.getTime() - firstJobDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
@@ -398,19 +399,19 @@ export class BusinessIntelligenceService {
     );
     
     const jobsSnapshot = await getDocs(jobsQuery);
-    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const jobs: Job[] = jobsSnapshot.docs.map(doc => ({ ...doc.data() as Job, id: doc.id }));
     
     const totalJobs = jobs.length;
-    const completedJobs = jobs.filter(job => job.status === 'completed').length;
+    const completedJobs = jobs.filter(job => job.status === 'Completed').length;
     
     // Calculate average job duration
     const completedJobsWithDuration = jobs.filter(job => 
-      job.status === 'completed' && job.startTime && job.endTime
+      job.status === 'Completed' && job.startTime && job.endTime
     );
     
     const averageJobDuration = completedJobsWithDuration.length > 0
       ? completedJobsWithDuration.reduce((sum, job) => {
-          const duration = new Date(job.endTime).getTime() - new Date(job.startTime).getTime();
+          const duration = new Date(job.endTime!).getTime() - new Date(job.startTime!).getTime();
           return sum + (duration / (1000 * 60)); // Convert to minutes
         }, 0) / completedJobsWithDuration.length
       : 0;
@@ -420,8 +421,8 @@ export class BusinessIntelligenceService {
     const onTimeCompletion = totalJobs > 0 ? (onTimeJobs / totalJobs) * 100 : 0;
     
     // Calculate revenue and costs
-    const revenueGenerated = jobs.reduce((sum, job) => sum + (job.totalAmount || 0), 0);
-    const costsIncurred = jobs.reduce((sum, job) => sum + (job.totalCosts || 0), 0);
+    const revenueGenerated = jobs.reduce((sum, job) => sum + (job.finalPrice || job.priceBreakdown?.total || 0), 0);
+    const costsIncurred = 0; // Jobs don't track costs directly
     const profitability = revenueGenerated - costsIncurred;
     
     // Calculate efficiency score (0-100)
@@ -429,7 +430,7 @@ export class BusinessIntelligenceService {
     const efficiencyScore = Math.round(
       (completionRate * 0.4) + 
       (onTimeCompletion * 0.3) + 
-      (Math.min(100, (profitability / revenueGenerated) * 100) * 0.3)
+      (Math.min(100, revenueGenerated > 0 ? (profitability / revenueGenerated) * 100 : 0) * 0.3)
     );
     
     return {
@@ -485,13 +486,13 @@ export class BusinessIntelligenceService {
     // Get service history for this chair
     const servicesQuery = query(
       collection(db, 'jobs'),
-      where('chairIds', 'array-contains', chairId),
-      where('status', '==', 'completed'),
+      where('chairs', 'array-contains', chairId),
+      where('status', '==', 'Completed'),
       orderBy('completedAt')
     );
     
     const servicesSnapshot = await getDocs(servicesQuery);
-    const services = servicesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const services: Job[] = servicesSnapshot.docs.map(doc => ({ ...doc.data() as Job, id: doc.id }));
     
     const totalServices = services.length;
     const ageInMonths = chairData.purchaseDate 
@@ -503,15 +504,17 @@ export class BusinessIntelligenceService {
     if (services.length > 1) {
       const intervals = [];
       for (let i = 1; i < services.length; i++) {
-        const interval = (new Date(services[i].completedAt).getTime() - 
-                         new Date(services[i-1].completedAt).getTime()) / (1000 * 60 * 60 * 24);
+        const currentDate = services[i].completedAt || services[i].createdAt;
+        const previousDate = services[i-1].completedAt || services[i-1].createdAt;
+        const interval = (new Date(currentDate).getTime() - 
+                         new Date(previousDate).getTime()) / (1000 * 60 * 60 * 24);
         intervals.push(interval);
       }
       averageTimeBetweenServices = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
     }
     
     // Calculate maintenance cost
-    const maintenanceCost = services.reduce((sum, service) => sum + (service.totalAmount || 0), 0);
+    const maintenanceCost = services.reduce((sum, service) => sum + (service.finalPrice || service.priceBreakdown?.total || 0), 0);
     
     // Calculate reliability score (0-100, higher = more reliable)
     const serviceFrequency = totalServices / ageInMonths; // services per month

@@ -76,6 +76,12 @@ export interface Job {
   finalPrice?: number;
   priceBreakdown?: PriceBreakdown;
   
+  // Timing and performance tracking
+  startTime?: Date;
+  endTime?: Date;
+  onTime?: boolean;
+  firstTimeFix?: boolean;
+  
   createdAt: Date;
   completedAt?: Date;
   updatedAt?: Date;

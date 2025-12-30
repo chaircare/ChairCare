@@ -4,9 +4,7 @@ import {
   signOut, 
   onAuthStateChanged,
   User as FirebaseUser,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  updatePassword
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { 
   doc, 
@@ -213,7 +211,7 @@ export const signInUser = async (email: string, password: string): Promise<UserP
                 passwordResetRequired: false,
                 firebasePasswordOutdated: false,
                 updatedAt: serverTimestamp()
-              };
+              } as unknown as UserProfile;
               
               await setDoc(doc(db, 'users', userCredential.user.uid), updatedProfile);
               
@@ -224,7 +222,7 @@ export const signInUser = async (email: string, password: string): Promise<UserP
               
               console.log('✅ Successfully created Firebase auth account and linked user');
               
-              return updatedProfile as UserProfile;
+              return updatedProfile;
             } catch (createError: any) {
               console.error('Error creating Firebase auth account:', createError);
               
@@ -251,7 +249,7 @@ export const signInUser = async (email: string, password: string): Promise<UserP
                     await deleteDoc(doc(db, 'users', userDoc.id));
                   }
                   
-                  return updatedProfile as UserProfile;
+                  return updatedProfile as unknown as UserProfile;
                 } catch (signInError) {
                   console.error('Failed to sign in with existing Firebase account:', signInError);
                   throw new Error('Account exists but password may have been changed. Please use password reset.');

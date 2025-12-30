@@ -5,21 +5,17 @@ import {
   getDoc,
   getDocs,
   setDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
   limit,
-  serverTimestamp,
-  Timestamp
+  serverTimestamp
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { 
   Chair, 
   ServiceLog, 
   Quote, 
-  ServicePricing, 
   DashboardStats,
   CreateChairForm,
   User
@@ -39,11 +35,9 @@ const timestampToDate = (timestamp: any): Date => {
 // Chair operations
 export const getChairs = async (clientId?: string): Promise<Chair[]> => {
   try {
-    let chairsQuery = collection(db, 'chairs');
-    
-    if (clientId) {
-      chairsQuery = query(collection(db, 'chairs'), where('clientId', '==', clientId));
-    }
+    const chairsQuery = clientId 
+      ? query(collection(db, 'chairs'), where('clientId', '==', clientId))
+      : collection(db, 'chairs');
     
     const querySnapshot = await getDocs(chairsQuery);
     const chairs: Chair[] = [];
@@ -184,12 +178,27 @@ export const createChair = async (data: CreateChairForm, clientId: string): Prom
     const chairRef = doc(db, 'chairs', chairId);
     await setDoc(chairRef, chairData);
     
-    return {
+    // Create a complete Chair object to return
+    const chair: Chair = {
       id: chairId,
-      ...chairData,
+      chairId: `CC-${chairId.padStart(6, '0')}`,
+      qrCode,
+      chairNumber: data.chairNumber,
+      location: data.location,
+      category: { id: data.category, name: data.category, description: '' }, // Would need to look up actual category
+      model: data.model,
+      clientId,
+      status: 'Active',
+      serviceHistory: [],
+      totalServices: 0,
+      totalSpent: 0,
+      qrCodeGenerated: true,
       createdAt: new Date(),
-      updatedAt: new Date()
-    } as Chair;
+      updatedAt: new Date(),
+      createdBy: clientId
+    };
+    
+    return chair;
   } catch (error) {
     console.error('Error creating chair:', error);
     throw error;
@@ -199,7 +208,7 @@ export const createChair = async (data: CreateChairForm, clientId: string): Prom
 // Service Log operations
 export const getServiceLogs = async (clientId?: string, chairId?: string): Promise<ServiceLog[]> => {
   try {
-    let logsQuery = collection(db, 'serviceLogs');
+    let logsQuery;
     
     if (clientId && chairId) {
       logsQuery = query(
@@ -402,20 +411,16 @@ export const createQuote = async (
 
 export const getQuotes = async (userId?: string): Promise<Quote[]> => {
   try {
-    let quotesQuery = collection(db, 'quotes');
-    
-    if (userId) {
-      quotesQuery = query(
-        collection(db, 'quotes'),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
-      );
-    } else {
-      quotesQuery = query(
-        collection(db, 'quotes'),
-        orderBy('createdAt', 'desc')
-      );
-    }
+    const quotesQuery = userId
+      ? query(
+          collection(db, 'quotes'),
+          where('userId', '==', userId),
+          orderBy('createdAt', 'desc')
+        )
+      : query(
+          collection(db, 'quotes'),
+          orderBy('createdAt', 'desc')
+        );
     
     const querySnapshot = await getDocs(quotesQuery);
     const quotes: Quote[] = [];
@@ -491,7 +496,7 @@ export const getDashboardStats = async (clientId?: string): Promise<DashboardSta
     const servicesByType = serviceLogs.reduce((acc, log) => {
       acc[log.serviceType] = (acc[log.serviceType] || 0) + 1;
       return acc;
-    }, {} as Record<'cleaning' | 'repair', number>);
+    }, {} as Record<'cleaning' | 'repair' | 'maintenance', number>);
     
     return {
       totalChairs: chairs.length,

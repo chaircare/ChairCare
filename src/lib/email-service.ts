@@ -1,5 +1,5 @@
 // Email Service for Chair Care Application
-import { Job, User, Chair } from 'types/chair-care';
+import { Job, User } from 'types/chair-care';
 
 interface EmailTemplate {
   subject: string;
@@ -15,14 +15,8 @@ interface EmailData {
 }
 
 class EmailService {
-  private apiKey: string;
-  private fromEmail: string;
-  private fromName: string;
-
   constructor() {
-    this.apiKey = process.env.SENDGRID_API_KEY || '';
-    this.fromEmail = process.env.FROM_EMAIL || 'noreply@chaircare.co.za';
-    this.fromName = 'Chair Care Solutions';
+    // Email service configuration would go here in production
   }
 
   // Job-related email templates
@@ -61,7 +55,7 @@ class EmailService {
               <p><strong>Location:</strong> ${job.location || 'Client site'}</p>
               <p><strong>Scheduled Date:</strong> ${job.scheduledDate?.toLocaleDateString('en-ZA') || 'To be scheduled'}</p>
               <p><strong>Number of Chairs:</strong> ${job.chairs?.length || 1}</p>
-              ${job.description ? `<p><strong>Description:</strong> ${job.description}</p>` : ''}
+              ${job.adminNotes ? `<p><strong>Notes:</strong> ${job.adminNotes}</p>` : ''}
             </div>
             
             <p>Please log into the system to view full job details and update the status when you begin work.</p>
@@ -96,7 +90,7 @@ class EmailService {
       Location: ${job.location || 'Client site'}
       Scheduled Date: ${job.scheduledDate?.toLocaleDateString('en-ZA') || 'To be scheduled'}
       Number of Chairs: ${job.chairs?.length || 1}
-      ${job.description ? `Description: ${job.description}` : ''}
+      ${job.adminNotes ? `Notes: ${job.adminNotes}` : ''}
       
       Please log into the system to view full details and update the status when you begin work.
       

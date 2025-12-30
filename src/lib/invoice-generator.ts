@@ -5,7 +5,7 @@ import {
   InvoiceSettings, 
   CreateInvoiceRequest 
 } from 'types/invoice';
-import { Job, ChairServiceEntry, Service, Part } from 'types/chair-care';
+import { Job, ChairServiceEntry, Service } from 'types/chair-care';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -132,7 +132,9 @@ export const createLineItemsFromJob = async (
     
     // Create service line items
     let itemId = 1;
-    for (const [key, data] of serviceMap) {
+    const serviceKeys = Array.from(serviceMap.keys());
+    for (const key of serviceKeys) {
+      const data = serviceMap.get(key)!;
       const [serviceName, chairId] = key.split('-');
       const chair = await getChairById(chairId);
       

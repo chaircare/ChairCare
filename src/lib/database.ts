@@ -2,8 +2,8 @@
 // In production, this would connect to Firebase
 
 import { 
-  User, Chair, ServiceLog, Quote, ServicePricing, BulkDiscount,
-  DashboardStats, CreateChairForm, ServiceRequestForm, CreateUserForm
+  User, Chair, ServiceLog, Quote, ServicePricing,
+  DashboardStats, CreateChairForm, CreateUserForm
 } from 'types/chair-care';
 
 // Mock data for development
@@ -30,23 +30,39 @@ let mockUsers: User[] = [
 let mockChairs: Chair[] = [
   {
     id: '1',
+    chairId: 'CC-000001',
     qrCode: 'CHAIRCARE:1:CH-001',
     chairNumber: 'CH-001',
     location: 'Office Floor 1 - Desk 5',
+    category: { id: 'executive', name: 'Executive Chair', description: 'High-end chairs for executive offices' },
     model: 'Executive Chair Model X',
-    userId: '2',
+    clientId: '2',
+    status: 'Active',
+    serviceHistory: [],
+    totalServices: 0,
+    totalSpent: 0,
+    qrCodeGenerated: true,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    createdBy: 'admin'
   },
   {
     id: '2',
+    chairId: 'CC-000002',
     qrCode: 'CHAIRCARE:2:CH-002',
     chairNumber: 'CH-002',
     location: 'Office Floor 1 - Desk 8',
+    category: { id: 'task', name: 'Task Chair', description: 'Standard office task chairs' },
     model: 'Task Chair Model Y',
-    userId: '2',
+    clientId: '2',
+    status: 'Active',
+    serviceHistory: [],
+    totalServices: 0,
+    totalSpent: 0,
+    qrCodeGenerated: true,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    createdBy: 'admin'
   }
 ];
 
@@ -54,7 +70,7 @@ let mockServiceLogs: ServiceLog[] = [
   {
     id: '1',
     chairId: '1',
-    userId: '2',
+    clientId: '2',
     serviceType: 'cleaning',
     description: 'Deep cleaning and sanitization',
     cost: 150,
@@ -126,11 +142,11 @@ export const createUser = async (data: CreateUserForm): Promise<User> => {
 export const getChairs = async (userId?: string): Promise<Chair[]> => {
   let chairs = mockChairs.map(chair => ({
     ...chair,
-    user: mockUsers.find(u => u.id === chair.userId)
+    user: mockUsers.find(u => u.id === chair.clientId)
   }));
   
   if (userId) {
-    chairs = chairs.filter(chair => chair.userId === userId);
+    chairs = chairs.filter(chair => chair.clientId === userId);
   }
   
   return chairs;
@@ -142,7 +158,7 @@ export const getChairById = async (id: string): Promise<Chair | null> => {
   
   return {
     ...chair,
-    user: mockUsers.find(u => u.id === chair.userId)
+    user: mockUsers.find(u => u.id === chair.clientId)
   };
 };
 
@@ -152,19 +168,30 @@ export const getChairByQRCode = async (qrCode: string): Promise<Chair | null> =>
   
   return {
     ...chair,
-    user: mockUsers.find(u => u.id === chair.userId)
+    user: mockUsers.find(u => u.id === chair.clientId)
   };
 };
 
 export const createChair = async (data: CreateChairForm, userId: string): Promise<Chair> => {
   const chairId = generateId();
+  const chairIdFormatted = `CC-${chairId.padStart(6, '0')}`;
   const chair: Chair = {
     id: chairId,
+    chairId: chairIdFormatted,
     qrCode: generateQRCode(chairId, data.chairNumber),
-    userId,
-    ...data,
+    chairNumber: data.chairNumber,
+    location: data.location,
+    category: { id: data.category, name: data.category, description: '' }, // Would need to look up actual category
+    model: data.model,
+    clientId: userId,
+    status: 'Active',
+    serviceHistory: [],
+    totalServices: 0,
+    totalSpent: 0,
+    qrCodeGenerated: true,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    createdBy: userId
   };
   mockChairs.push(chair);
   return chair;
@@ -175,11 +202,11 @@ export const getServiceLogs = async (userId?: string, chairId?: string): Promise
   let logs = mockServiceLogs.map(log => ({
     ...log,
     chair: mockChairs.find(c => c.id === log.chairId),
-    user: mockUsers.find(u => u.id === log.userId)
+    user: mockUsers.find(u => u.id === log.clientId)
   }));
   
   if (userId) {
-    logs = logs.filter(log => log.userId === userId);
+    logs = logs.filter(log => log.clientId === userId);
   }
   
   if (chairId) {
@@ -196,7 +223,7 @@ export const createServiceLog = async (chairId: string, userId: string, serviceT
   const serviceLog: ServiceLog = {
     id: generateId(),
     chairId,
-    userId,
+    clientId: userId,
     serviceType,
     description,
     cost,
@@ -287,7 +314,7 @@ export const getDashboardStats = async (userId?: string): Promise<DashboardStats
   const servicesByType = serviceLogs.reduce((acc, log) => {
     acc[log.serviceType] = (acc[log.serviceType] || 0) + 1;
     return acc;
-  }, {} as Record<'cleaning' | 'repair', number>);
+  }, {} as Record<'cleaning' | 'repair' | 'maintenance', number>);
   
   return {
     totalChairs: chairs.length,

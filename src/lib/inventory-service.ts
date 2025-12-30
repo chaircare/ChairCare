@@ -5,11 +5,9 @@ import {
   StockAlert, 
   ReorderSuggestion,
   InventoryMetrics,
-  UsageAnalytics,
-  PurchaseOrder,
-  StockAdjustment
+  UsageAnalytics
 } from 'types/inventory';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc, orderBy, limit } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
 
 export class InventoryService {
@@ -475,6 +473,7 @@ export class InventoryService {
           reason: 'Job usage',
           reference: jobId,
           performedBy: 'technician', // Should be actual technician ID
+          performedAt: new Date(),
           notes: part.notes
         });
         
