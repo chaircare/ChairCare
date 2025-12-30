@@ -165,11 +165,11 @@ const TierBadge = styled.span<{ tier: string }>`
       case 'platinum':
         return `background: ${theme.colors.purple[100]}; color: ${theme.colors.purple[700]};`;
       case 'gold':
-        return `background: ${theme.colors.yellow[100]}; color: ${theme.colors.yellow[700]};`;
+        return `background: ${theme.colors.accent[100]}; color: ${theme.colors.accent[700]};`;
       case 'silver':
         return `background: ${theme.colors.gray[200]}; color: ${theme.colors.gray[700]};`;
       default:
-        return `background: ${theme.colors.orange[100]}; color: ${theme.colors.orange[700]};`;
+        return `background: ${theme.colors.gray[100]}; color: ${theme.colors.gray[700]};`;
     }
   }}
 `;

@@ -9,12 +9,7 @@ export const generateQRCodeDataURL = async (text: string): Promise<string> => {
         dark: '#000000',
         light: '#FFFFFF'
       },
-      errorCorrectionLevel: 'M', // Medium error correction for better scanning
-      type: 'image/png',
-      quality: 0.92,
-      rendererOpts: {
-        quality: 0.92
-      }
+      errorCorrectionLevel: 'M' // Medium error correction for better scanning
     });
     return qrCodeDataURL;
   } catch (error) {

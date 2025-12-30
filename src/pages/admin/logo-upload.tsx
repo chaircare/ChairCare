@@ -84,8 +84,8 @@ const CurrentLogo = styled.img`
   max-width: 200px;
   max-height: 100px;
   object-fit: contain;
-  border-radius: ${props => props.theme.borderRadius.md};
-  border: 1px solid ${props => props.theme.colors.border.primary};
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
 `;
 
 const LogoActions = styled.div<{ theme: any }>`

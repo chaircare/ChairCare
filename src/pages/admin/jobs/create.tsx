@@ -6,7 +6,7 @@ import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
 import { theme } from 'styles/theme';
 import { User } from 'types/chair-care';
-import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, serverTimestamp, query, where } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 import { useRouter } from 'next/router';
 

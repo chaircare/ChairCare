@@ -361,7 +361,6 @@ export class PricingEngine {
     // This would integrate with market data APIs or manual competitor analysis
     // For now, return basic recommendations based on profit margins
     
-    const targetMargin = 0.35; // 35% target profit margin
     const recommendedPrice = currentPrice * 1.1; // Simple 10% increase suggestion
     
     return {

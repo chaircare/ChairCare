@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { userId, newPassword }: ResetPasswordRequest = req.body;
+    const { userId }: ResetPasswordRequest = req.body;
 
     // Validate required fields
     if (!userId) {

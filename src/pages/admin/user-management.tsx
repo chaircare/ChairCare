@@ -10,7 +10,7 @@ import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
 import { Input } from 'components/ui/Input';
 import { UserProfileModal } from 'components/user/UserProfileModal';
-import { collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc, where } from 'firebase/firestore';
+import { collection, query, getDocs, addDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { db } from 'lib/firebase';
 
@@ -558,7 +558,7 @@ const UserManagementPage: NextPage = () => {
                 
                 <UserDetails theme={theme}>
                   <div><strong>Created:</strong> {formatDate(userData.createdAt)}</div>
-                  <div><strong>Status:</strong> {userData.isActive ? 'Active' : 'Inactive'}</div>
+                  <div><strong>Status:</strong> {userData.status || 'Unknown'}</div>
                   {userData.specialization && (
                     <div><strong>Specialization:</strong> {userData.specialization}</div>
                   )}

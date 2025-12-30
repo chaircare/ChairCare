@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAuth } from 'contexts/AuthContext';
 import { useTheme } from 'contexts/ThemeContext';
-import { Chair, ServiceLog, Quote } from 'types/chair-care';
+import { Chair, ServiceLog } from 'types/chair-care';
 import { Layout } from 'components/ui/Layout';
 import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
@@ -415,9 +415,9 @@ const ChairHistoryPage: NextPage = () => {
                   <ServiceDetails theme={theme}>
                     <span>
                       📅 {formatDate(log.createdAt)}
-                      {log.technicianId && (
+                      {log.user && (
                         <span style={{ marginLeft: theme.spacing.md }}>
-                          👨‍🔧 Technician: {log.technicianName || 'Assigned'}
+                          👨‍🔧 Technician: {log.user?.name || 'Assigned'}
                         </span>
                       )}
                     </span>

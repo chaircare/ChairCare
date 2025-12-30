@@ -45,11 +45,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: client.id,
         email: client.email,
         name: client.name || client.companyName || client.contactPerson,
-        role: 'client'
+        role: 'client' as const,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       invoice.total,
       // Handle Firestore Timestamp for dueDate
-      invoice.dueDate.toDate ? invoice.dueDate.toDate() : new Date(invoice.dueDate)
+      new Date(invoice.dueDate)
     );
 
     if (!emailSent) {

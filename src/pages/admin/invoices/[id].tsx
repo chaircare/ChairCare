@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAuth } from 'contexts/AuthContext';
 import { useTheme } from 'contexts/ThemeContext';
-import { Job, Chair } from 'types/chair-care';
+import { Job } from 'types/chair-care';
 import { JobPartsUsage } from 'types/inventory';
 import { Layout } from 'components/ui/Layout';
 import { Button } from 'components/ui/Button';
@@ -268,7 +268,7 @@ const InvoicePage: NextPage = () => {
       const partsUsed = partsSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      })) as JobPartsUsage[];
+      } as unknown as JobPartsUsage));
       
       // Generate invoice items
       const items: InvoiceItem[] = [];
@@ -302,7 +302,7 @@ const InvoicePage: NextPage = () => {
         jobId: jobData.id,
         clientId: jobData.clientId || '',
         clientName: jobData.clientName,
-        clientEmail: jobData.clientEmail || '',
+        clientEmail: '', // Would need to get from client profile
         status: 'draft',
         issueDate: new Date(),
         dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days

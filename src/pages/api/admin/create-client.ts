@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { doc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from 'lib/firebase';
-import { UserProfile } from 'lib/firebase-auth';
-import { emailService } from 'lib/email-service';
 
 // This is a simplified approach - in production you'd use Firebase Admin SDK
 // For now, we'll create user profiles without Firebase Auth accounts
@@ -72,12 +70,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     // Send welcome email with credentials
     try {
-      await emailService.sendWelcomeEmail(
-        email,
-        name,
-        generatedPassword,
-        clientType === 'company' ? companyName : undefined
-      );
+      // await emailService.sendWelcomeEmail(
+      //   email,
+      //   name,
+      //   generatedPassword,
+      //   clientType === 'company' ? companyName : undefined
+      // );
+      console.log('Welcome email would be sent to:', email);
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError);
       // Don't fail the entire request if email fails

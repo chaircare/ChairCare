@@ -429,7 +429,7 @@ const JobProgressPage: NextPage = () => {
                   <JobDetails theme={theme}>
                     <div><strong>Client:</strong> {job.clientName}</div>
                     <div><strong>Type:</strong> {job.jobType}</div>
-                    <div><strong>Scheduled:</strong> {formatDate(job.scheduledDate)}</div>
+                    <div><strong>Scheduled:</strong> {formatDate(job.scheduledDate || null)}</div>
                     <div><strong>Chairs:</strong> {job.chairs?.length || 0}</div>
                     {job.location && <div><strong>Location:</strong> {job.location}</div>}
                   </JobDetails>

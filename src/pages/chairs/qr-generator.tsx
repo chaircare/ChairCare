@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import apiClient from 'lib/api-client';
 import { useAuth } from 'contexts/AuthContext';
 import { useTheme } from 'contexts/ThemeContext';
-import { Chair, User } from 'types/chair-care';
+import { Chair } from 'types/chair-care';
 import { generateQRCodeDataURL } from 'lib/qr-utils';
 import { Layout } from 'components/ui/Layout';
 import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
 import { QRScannerIcon } from 'components/icons/IconSystem';
-import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 
 const QRContainer = styled.div`
@@ -75,7 +75,7 @@ const ChairsGrid = styled.div<{ theme: any }>`
   gap: ${props => props.theme.spacing['3xl']};
 `;
 
-const ClientSection = styled.div<{ theme: any }>`
+// const ClientSection = styled.div<{ theme: any }>`
   margin-bottom: ${props => props.theme.spacing['3xl']};
 `;
 

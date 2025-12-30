@@ -629,7 +629,6 @@ const TechniciansPage: NextPage = () => {
                   type="button"
                   variant="outline"
                   onClick={() => setShowModal(false)}
-                  style={{ flex: 1 }}
                 >
                   Cancel
                 </Button>
@@ -637,7 +636,6 @@ const TechniciansPage: NextPage = () => {
                   type="submit"
                   variant="primary"
                   disabled={submitting}
-                  style={{ flex: 1 }}
                 >
                   {submitting ? 'Adding...' : 'Add Technician'}
                 </Button>

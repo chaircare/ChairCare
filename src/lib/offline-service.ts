@@ -1,7 +1,6 @@
 // Offline Service for Chair Care
 import { 
   OfflineData, 
-  SyncConflict, 
   OfflineSettings, 
   SyncStatus, 
   NetworkStatus,
@@ -233,20 +232,18 @@ class OfflineService {
     });
 
     // Perform actual sync based on item type and action
-    let response;
-    
     switch (item.type) {
       case 'job':
-        response = await this.syncJobData(item);
+        await this.syncJobData(item);
         break;
       case 'chair':
-        response = await this.syncChairData(item);
+        await this.syncChairData(item);
         break;
       case 'service_request':
-        response = await this.syncServiceRequestData(item);
+        await this.syncServiceRequestData(item);
         break;
       case 'stock_movement':
-        response = await this.syncStockMovementData(item);
+        await this.syncStockMovementData(item);
         break;
       default:
         throw new Error(`Unknown sync type: ${item.type}`);

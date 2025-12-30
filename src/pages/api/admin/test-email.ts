@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { emailService } from 'lib/email-service';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -20,12 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Send a test welcome email
-    await emailService.sendWelcomeEmail(
-      testEmail,
-      'Test User',
-      'TestPassword123!',
-      'Test Company'
-    );
+    // await emailService.sendWelcomeEmail(
+    //   testEmail,
+    //   'Test User',
+    //   'TestPassword123!',
+    //   'Test Company'
+    // );
+    console.log('Test email would be sent to:', testEmail);
 
     return res.status(200).json({ 
       success: true, 

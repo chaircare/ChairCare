@@ -69,7 +69,7 @@ const TableHeader = styled.th`
 
 const TableRow = styled.tr`
   &:nth-of-type(even) {
-    background: ${theme.colors.gray[25]};
+    background: ${theme.colors.gray[50]};
   }
   
   &:hover {

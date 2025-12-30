@@ -189,7 +189,7 @@ const ServiceRequests: NextPage = () => {
         const requestData = requestDoc.data() as ServiceLog;
         
         // Convert Firestore timestamp to Date
-        const createdAt = requestData.createdAt?.toDate ? requestData.createdAt.toDate() : new Date(requestData.createdAt);
+        const createdAt = new Date(requestData.createdAt);
         
         // Get chair details
         let chair: Chair | undefined;
@@ -226,8 +226,8 @@ const ServiceRequests: NextPage = () => {
         }
         
         requestsWithDetails.push({
-          id: requestDoc.id,
           ...requestData,
+          id: requestDoc.id,
           createdAt, // Use the converted Date object
           chair,
           client,

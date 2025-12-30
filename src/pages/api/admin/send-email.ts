@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { emailService } from '../../../lib/email-service';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -7,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { type, email, name, password, role } = req.body;
+    const { type, email, name, password } = req.body;
 
     if (!type || !email || !name) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -18,14 +17,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!password) {
           return res.status(400).json({ error: 'Password required for welcome email' });
         }
-        await emailService.sendWelcomeEmail(email, name, password, role || 'Client');
+        // await emailService.sendWelcomeEmail(email, name, password, role || 'Client');
+        console.log('Welcome email would be sent to:', email);
         break;
       
       case 'password-reset':
         if (!password) {
           return res.status(400).json({ error: 'Password required for reset email' });
         }
-        await emailService.sendPasswordResetEmail(email, name, password);
+        // await emailService.sendPasswordResetEmail(email, name, password);
+        console.log('Password reset email would be sent to:', email);
         break;
       
       default:

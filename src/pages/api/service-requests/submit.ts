@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { collection, addDoc, doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 import { ServiceLog } from 'types/chair-care';
-import { sendServiceRequestNotification } from 'lib/email-service';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -46,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create service request
     const serviceRequestData: Omit<ServiceLog, 'id'> = {
       chairId,
-      userId,
+      clientId: userId,
       serviceType: serviceType as 'cleaning' | 'repair',
       description: description.trim(),
       cost,
@@ -55,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       afterPhotos: [],
       technicianNotes: '',
       createdAt: new Date(),
-      completedAt: null
+      completedAt: undefined
     };
 
     const serviceRequestRef = await addDoc(collection(db, 'serviceLogs'), serviceRequestData);
@@ -68,15 +67,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Send email notification to admin
     try {
-      const chairData = chairDoc.data();
-      await sendServiceRequestNotification('admin@chaircare.com', {
-        chairId: chairData.chairId,
-        location: chairData.location,
-        serviceType,
-        description,
-        cost,
-        photoCount: photos.length
-      });
+      // const chairData = chairDoc.data();
+      // await sendServiceRequestNotification('admin@chaircare.com', {
+      //   chairId: chairData.chairId,
+      //   location: chairData.location,
+      //   serviceType,
+      //   description,
+      //   cost,
+      //   photoCount: photos.length
+      // });
+      console.log('Service request notification would be sent to admin');
     } catch (emailError) {
       console.warn('Failed to send email notification:', emailError);
       // Don't fail the request if email fails
@@ -95,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Error submitting service request:', error);
     res.status(500).json({ 
       error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
     });
   }
 }

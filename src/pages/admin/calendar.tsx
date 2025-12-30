@@ -328,7 +328,7 @@ const CalendarPage: NextPage = () => {
                   
                   <DetailRow theme={theme}>
                     <DetailLabel theme={theme}>Scheduled Date:</DetailLabel>
-                    <DetailValue theme={theme}>{formatDate(selectedJob.scheduledDate)}</DetailValue>
+                    <DetailValue theme={theme}>{formatDate(selectedJob.scheduledDate || null)}</DetailValue>
                   </DetailRow>
                   
                   <DetailRow theme={theme}>
@@ -353,10 +353,10 @@ const CalendarPage: NextPage = () => {
                     </DetailValue>
                   </DetailRow>
                   
-                  {selectedJob.description && (
+                  {selectedJob.adminNotes && (
                     <DetailRow theme={theme}>
-                      <DetailLabel theme={theme}>Description:</DetailLabel>
-                      <DetailValue theme={theme}>{selectedJob.description}</DetailValue>
+                      <DetailLabel theme={theme}>Notes:</DetailLabel>
+                      <DetailValue theme={theme}>{selectedJob.adminNotes}</DetailValue>
                     </DetailRow>
                   )}
                   

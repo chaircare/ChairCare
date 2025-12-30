@@ -9,14 +9,14 @@ import { Button } from 'components/ui/Button';
 import { Card } from 'components/ui/Card';
 import { Input } from 'components/ui/Input';
 import { Job } from 'types/chair-care';
-import { calculateJobPricing, formatCurrency, SERVICE_PRICING, getEstimatedPrice } from 'utils/pricing';
+import { formatCurrency, SERVICE_PRICING, getEstimatedPrice } from 'utils/pricing';
 import { doc, getDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 
 const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  padding: ${props => props.theme.spacing.xl};
+  padding: 2rem;
 `;
 
 const FormCard = styled(Card)<{ theme: any }>`
@@ -179,8 +179,7 @@ const EditJobPage: NextPage = () => {
         serviceType: jobData.serviceType || '',
         status: jobData.status || '',
         scheduledDate: jobData.scheduledDate ? 
-          (jobData.scheduledDate.toDate ? jobData.scheduledDate.toDate() : new Date(jobData.scheduledDate))
-            .toISOString().split('T')[0] : '',
+          new Date(jobData.scheduledDate).toISOString().split('T')[0] : '',
         scheduledTime: jobData.scheduledTime || '',
         assignedTechnicianId: jobData.assignedTechnicianId || '',
         assignedTechnicianName: jobData.assignedTechnicianName || '',
