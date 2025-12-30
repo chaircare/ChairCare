@@ -473,7 +473,7 @@ const JobArrivalPage: NextPage = () => {
               <DetailLabel>Job Type</DetailLabel>
             </DetailCard>
             <DetailCard>
-              <DetailNumber>{formatDateTime(job.scheduledDate, job.scheduledTime)}</DetailNumber>
+              <DetailNumber>{formatDateTime(job.scheduledDate || null, job.scheduledTime)}</DetailNumber>
               <DetailLabel>Scheduled</DetailLabel>
             </DetailCard>
           </JobDetailsGrid>

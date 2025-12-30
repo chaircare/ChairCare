@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
@@ -76,8 +76,8 @@ const ChairsGrid = styled.div<{ theme: any }>`
 `;
 
 // const ClientSection = styled.div<{ theme: any }>`
-  margin-bottom: ${props => props.theme.spacing['3xl']};
-`;
+//   margin-bottom: ${props => props.theme.spacing['3xl']};
+// `;
 
 const ClientHeader = styled(Card)<{ theme: any }>`
   background: ${props => props.theme.mode === 'dark' 

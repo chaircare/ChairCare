@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useAuth } from 'contexts/AuthContext';
-import { Client, User, CreateJobForm, CreateChairForm } from 'types/chair-care';
+import { Client, User, CreateJobForm, CreateJobChair } from 'types/chair-care';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -250,7 +250,7 @@ const CreateJobPage: NextPage = () => {
     }));
   };
 
-  const handleChairChange = (index: number, field: keyof CreateChairForm, value: any) => {
+  const handleChairChange = (index: number, field: keyof CreateJobChair, value: any) => {
     setFormData(prev => ({
       ...prev,
       chairs: prev.chairs.map((chair, i) => 

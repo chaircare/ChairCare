@@ -269,7 +269,7 @@ const AvailableJobsPage: NextPage = () => {
     }
     
     if (selectedPriority !== 'all') {
-      filtered = filtered.filter(job => job.priority === selectedPriority);
+      filtered = filtered.filter(job => getJobPriority(job) === selectedPriority);
     }
     
     setFilteredJobs(filtered);
@@ -314,7 +314,7 @@ const AvailableJobsPage: NextPage = () => {
 
   const getJobPriority = (job: Job): string => {
     // Simple priority logic - can be enhanced
-    if (job.jobType === 'repair') return 'high';
+    if (job.jobType === 'Workshop') return 'high';
     if (job.chairs && job.chairs.length > 5) return 'medium';
     return 'low';
   };
@@ -439,7 +439,7 @@ const AvailableJobsPage: NextPage = () => {
                     
                     <DetailRow theme={theme}>
                       <DetailLabel theme={theme}>Preferred Date:</DetailLabel>
-                      <DetailValue theme={theme}>{formatDate(job.scheduledDate)}</DetailValue>
+                      <DetailValue theme={theme}>{formatDate(job.scheduledDate || null)}</DetailValue>
                     </DetailRow>
                     
                     <DetailRow theme={theme}>
@@ -447,17 +447,10 @@ const AvailableJobsPage: NextPage = () => {
                       <DetailValue theme={theme}>{formatDate(job.createdAt)}</DetailValue>
                     </DetailRow>
                     
-                    {job.description && (
+                    {job.adminNotes && (
                       <JobDescription theme={theme}>
-                        <strong>Description:</strong><br />
-                        {job.description}
-                      </JobDescription>
-                    )}
-                    
-                    {job.specialRequirements && (
-                      <JobDescription theme={theme}>
-                        <strong>Special Requirements:</strong><br />
-                        {job.specialRequirements}
+                        <strong>Admin Notes:</strong><br />
+                        {job.adminNotes}
                       </JobDescription>
                     )}
                   </JobDetails>

@@ -88,7 +88,7 @@ const TableRow = styled.div`
   align-items: center;
   
   &:hover {
-    background: ${theme.colors.gray[25]};
+    background: ${theme.colors.gray[50]};
   }
 `;
 

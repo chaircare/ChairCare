@@ -17,6 +17,22 @@ export interface User {
   createdBy?: string;
 }
 
+export interface Client {
+  id: string;
+  companyName?: string;
+  contactPerson?: string;
+  email: string;
+  phone?: string;
+  physicalAddress?: string;
+  billingAddress?: string;
+  vatNumber?: string;
+  paymentTerms?: number;
+  notes?: string;
+  status?: 'active' | 'inactive';
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface Chair {
   id: string;
   chairId: string; // CC-XXXXXX format (unique identifier)
@@ -248,6 +264,37 @@ export interface CreateChairForm {
   location: string;
   category: string; // Category ID
   model?: string;
+}
+
+export interface CreateClientForm {
+  type: 'business' | 'individual';
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  physicalAddress: string;
+  billingAddress: string;
+  vatNumber: string;
+  paymentTerms: number;
+  notes: string;
+}
+
+export interface CreateJobForm {
+  clientId: string;
+  jobType: 'on-site' | 'workshop' | 'assessment';
+  scheduledDate: string;
+  assignedTechnicianId: string;
+  location: string;
+  adminNotes: string;
+  chairs: CreateJobChair[];
+}
+
+export interface CreateJobChair {
+  chairType: string;
+  chairId: string;
+  issueReported: string;
+  servicesNeeded: string[];
+  partsNeeded: string[];
 }
 
 export interface ServiceRequestForm {

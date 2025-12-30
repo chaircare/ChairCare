@@ -28,7 +28,7 @@ const IndexPage: NextPage<ServerSideProps> = (props: ServerSideProps) => {
 
 	if (loading) {
 		return (
-			<Layout metaTags={defaultMetaTags}>
+			<Layout>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
 					Loading...
 				</div>
@@ -37,7 +37,7 @@ const IndexPage: NextPage<ServerSideProps> = (props: ServerSideProps) => {
 	}
 
 	return (
-		<Layout metaTags={defaultMetaTags}>
+		<Layout>
 			<Welcome title={home.welcome.title} />
 		</Layout>
 	);

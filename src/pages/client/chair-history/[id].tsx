@@ -277,17 +277,11 @@ const ChairHistoryPage: NextPage = () => {
         description,
         issueDetails,
         status: 'pending',
-        createdAt: serverTimestamp(), // Use Firestore serverTimestamp
+        createdAt: new Date(), // Use current date instead of serverTimestamp for type compatibility
         requestedBy: user.name,
         contactEmail: user.email,
         contactPhone: user.phone || '',
-        beforePhotos: photos.map(photo => ({
-          url: photo.url,
-          filename: photo.filename,
-          category: photo.category,
-          uploadedAt: photo.uploadedAt,
-          size: photo.size
-        })),
+        beforePhotos: photos.map(photo => photo.url),
         afterPhotos: [],
         cost: 0 // Will be calculated later
       };
@@ -401,7 +395,7 @@ const ChairHistoryPage: NextPage = () => {
 
         <ChairDetails>
           <DetailCard>
-            <DetailValue style={{ color: getConditionColor(chair.condition) }}>
+            <DetailValue style={{ color: getConditionColor(chair.condition || 'good') }}>
               {chair.condition || 'Unknown'}
             </DetailValue>
             <DetailLabel>Condition</DetailLabel>
@@ -490,7 +484,7 @@ const ChairHistoryPage: NextPage = () => {
                   marginBottom: theme.spacing.md,
                   lineHeight: 1.6,
                   padding: theme.spacing.md,
-                  background: theme.mode === 'dark' ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff',
+                  background: '#eff6ff',
                   borderRadius: theme.borderRadius.md,
                   border: `1px solid ${theme.colors.primary[200]}`
                 }}>

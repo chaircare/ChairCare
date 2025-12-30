@@ -362,7 +362,8 @@ const ClientChairs: NextPage = () => {
         ) : (
           <ChairsGrid>
             {filteredChairs.map(chair => (
-              <ChairCard key={chair.id} onClick={() => handleChairClick(chair.id)}>
+              <div key={chair.id} onClick={() => handleChairClick(chair.id)} style={{ cursor: 'pointer' }}>
+                <ChairCard>
                 <ChairHeader>
                   <ChairInfo>
                     <ChairNumber>Chair {chair.chairNumber}</ChairNumber>
@@ -380,7 +381,7 @@ const ClientChairs: NextPage = () => {
                 <ChairDetails>
                   <DetailItem>
                     <DetailLabel>Purchase Date:</DetailLabel>
-                    <DetailValue>{formatDate(chair.purchaseDate)}</DetailValue>
+                    <DetailValue>{chair.purchaseDate ? formatDate(chair.purchaseDate) : 'Not set'}</DetailValue>
                   </DetailItem>
                   <DetailItem>
                     <DetailLabel>Warranty:</DetailLabel>
@@ -405,25 +406,20 @@ const ClientChairs: NextPage = () => {
                   <Button 
                     size="sm" 
                     variant="primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleChairClick(chair.id);
-                    }}
+                    onClick={() => handleChairClick(chair.id)}
                   >
                     View History
                   </Button>
                   <Button 
                     size="sm" 
                     variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(`/client/chair-history/${chair.id}?request=true`);
-                    }}
+                    onClick={() => router.push(`/client/chair-history/${chair.id}?request=true`)}
                   >
                     Request Service
                   </Button>
                 </ChairActions>
               </ChairCard>
+              </div>
             ))}
           </ChairsGrid>
         )}

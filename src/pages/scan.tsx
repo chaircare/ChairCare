@@ -28,10 +28,10 @@ const ScanCard = styled(Card)<{ theme: any }>`
   border: 1px solid ${props => props.theme.colors.border.primary};
 `;
 
-const ScanIcon = styled.div<{ theme: any }>`
+const ScanIcon = styled.div<{ theme: any; mode: string }>`
   width: 4rem;
   height: 4rem;
-  background: ${props => props.theme.mode === 'dark' 
+  background: ${props => props.mode === 'dark' 
     ? 'linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(3, 105, 161, 0.3) 100%)'
     : 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)'
   };
@@ -40,7 +40,7 @@ const ScanIcon = styled.div<{ theme: any }>`
   align-items: center;
   justify-content: center;
   margin: 0 auto ${props => props.theme.spacing.lg};
-  color: ${props => props.theme.mode === 'dark' ? '#60a5fa' : '#ffffff'};
+  color: ${props => props.mode === 'dark' ? '#60a5fa' : '#ffffff'};
   box-shadow: ${props => props.theme.shadows.lg};
 `;
 
@@ -61,8 +61,8 @@ const QRInputSection = styled.div<{ theme: any }>`
   margin-bottom: ${props => props.theme.spacing.xl};
 `;
 
-const ChairInfoCard = styled(Card)<{ theme: any }>`
-  background: ${props => props.theme.mode === 'dark' 
+const ChairInfoCard = styled(Card)<{ theme: any; mode: string }>`
+  background: ${props => props.mode === 'dark' 
     ? 'linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(3, 105, 161, 0.1) 100%)'
     : 'linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(3, 105, 161, 0.05) 100%)'
   };
@@ -96,7 +96,7 @@ const InfoValue = styled.div<{ theme: any }>`
   font-weight: ${props => props.theme.typography.fontWeight.semibold};
 `;
 
-const ServiceForm = styled.form`
+const ServiceForm = styled.form<{ theme: any }>`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.lg};
@@ -163,7 +163,7 @@ const AlertMessage = styled.div<{ type: 'error' | 'success'; theme: any }>`
 
 const ScanPage: NextPage = () => {
   const { user } = useAuth();
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const router = useRouter();
   const [qrCode, setQrCode] = useState('');
   const [chair, setChair] = useState<Chair | null>(null);
@@ -269,7 +269,7 @@ const ScanPage: NextPage = () => {
       <ScanContainer>
         <ScanCard theme={theme}>
           <Card.Content>
-            <ScanIcon theme={theme}>
+            <ScanIcon theme={theme} mode={mode}>
               <QRScannerIcon size={32} />
             </ScanIcon>
             <ScanTitle theme={theme}>Scan Chair QR Code</ScanTitle>
@@ -284,7 +284,6 @@ const ScanPage: NextPage = () => {
                 onChange={(e) => setQrCode(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleScan()}
                 fullWidth
-                size="lg"
               />
               <div style={{ marginTop: theme.spacing.lg }}>
                 <Button 
@@ -305,7 +304,7 @@ const ScanPage: NextPage = () => {
 
         {chair && (
           <>
-            <ChairInfoCard theme={theme}>
+            <ChairInfoCard theme={theme} mode={mode}>
               <Card.Header>
                 <Card.Title>Chair Information</Card.Title>
               </Card.Header>
@@ -336,7 +335,7 @@ const ScanPage: NextPage = () => {
                 <Card.Title>Request Service</Card.Title>
               </Card.Header>
               <Card.Content>
-                <ServiceForm onSubmit={handleServiceSubmit}>
+                <ServiceForm theme={theme} onSubmit={handleServiceSubmit}>
                   <div>
                     <InfoLabel theme={theme} style={{ marginBottom: theme.spacing.sm }}>Service Type</InfoLabel>
                     <Select
@@ -370,7 +369,7 @@ const ScanPage: NextPage = () => {
                       marginBottom: theme.spacing.md,
                       lineHeight: 1.6,
                       padding: theme.spacing.md,
-                      background: theme.mode === 'dark' ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff',
+                      background: mode === 'dark' ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff',
                       borderRadius: theme.borderRadius.md,
                       border: `1px solid ${theme.colors.primary[200]}`
                     }}>

@@ -580,14 +580,15 @@ const ClientDashboard: NextPage = () => {
           ) : (
             <ChairsGrid>
               {chairs.map(chair => (
-                <ChairCard key={chair.id} onClick={() => handleChairClick(chair.id)}>
-                  <ChairHeader>
-                    <ChairInfo>
-                      <ChairNumber>Chair {chair.chairNumber}</ChairNumber>
-                      <ChairLocation>{chair.location}</ChairLocation>
-                    </ChairInfo>
-                    <ConditionBadge condition={chair.condition || 'unknown'}>
-                      {chair.condition || 'Unknown'}
+                <div key={chair.id} onClick={() => handleChairClick(chair.id)} style={{ cursor: 'pointer' }}>
+                  <ChairCard>
+                    <ChairHeader>
+                      <ChairInfo>
+                        <ChairNumber>Chair {chair.chairNumber}</ChairNumber>
+                        <ChairLocation>{chair.location}</ChairLocation>
+                      </ChairInfo>
+                      <ConditionBadge condition={chair.condition || 'unknown'}>
+                        {chair.condition || 'Unknown'}
                     </ConditionBadge>
                   </ChairHeader>
                   
@@ -621,8 +622,7 @@ const ClientDashboard: NextPage = () => {
                             <Button 
                               variant="outline"
                               size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
+                              onClick={() => {
                                 downloadQRCode(chair);
                               }}
                             >
@@ -631,8 +631,7 @@ const ClientDashboard: NextPage = () => {
                             <Button 
                               variant="secondary"
                               size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
+                              onClick={() => {
                                 printQRCode(chair);
                               }}
                             >
@@ -661,8 +660,7 @@ const ClientDashboard: NextPage = () => {
                     <Button 
                       size="sm" 
                       variant="primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
                         handleChairClick(chair.id);
                       }}
                     >
@@ -671,8 +669,7 @@ const ClientDashboard: NextPage = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
                         router.push(`/client/chair-history/${chair.id}?request=true`);
                       }}
                     >
@@ -680,6 +677,7 @@ const ClientDashboard: NextPage = () => {
                     </Button>
                   </ChairActions>
                 </ChairCard>
+                </div>
               ))}
             </ChairsGrid>
           )}
