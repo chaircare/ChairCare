@@ -15,6 +15,7 @@ import { PhotoUpload, UploadedPhoto } from 'components/PhotoUpload';
 import { QRScannerIcon } from 'components/icons/IconSystem';
 import { collection, query, where, getDocs, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
+import { theme } from 'styles/theme';
 
 const ScanContainer = styled.div`
   max-width: 600px;
