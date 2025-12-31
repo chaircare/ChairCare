@@ -8,9 +8,27 @@ const EmailTestPage: NextPage = () => {
   const { user } = useAuth();
   const router = useRouter();
 
-  if (!user || user.role !== 'admin') {
+  // Don't redirect during SSR
+  if (typeof window !== 'undefined' && (!user || user.role !== 'admin')) {
     router.push('/dashboard');
     return null;
+  }
+
+  // Show loading or access denied during SSR
+  if (!user) {
+    return (
+      <Layout>
+        <div>Loading...</div>
+      </Layout>
+    );
+  }
+
+  if (user.role !== 'admin') {
+    return (
+      <Layout>
+        <div>Access denied. Admin access required.</div>
+      </Layout>
+    );
   }
 
   return (

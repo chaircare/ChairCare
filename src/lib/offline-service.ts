@@ -13,7 +13,7 @@ class OfflineService {
   private db: IDBPDatabase | null = null;
   private syncInProgress = false;
   private networkStatus: NetworkStatus = {
-    isOnline: navigator.onLine,
+    isOnline: typeof window !== 'undefined' ? navigator.onLine : false,
     connectionType: 'unknown',
     effectiveType: 'unknown',
     downlink: 0,
@@ -87,6 +87,8 @@ class OfflineService {
   }
 
   private setupNetworkMonitoring(): void {
+    if (typeof window === 'undefined') return;
+    
     // Basic online/offline detection
     window.addEventListener('online', () => {
       this.networkStatus.isOnline = true;
@@ -265,7 +267,7 @@ class OfflineService {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('authToken') : ''}`
       },
       body: item.action !== 'delete' ? JSON.stringify(item.data) : undefined
     });
@@ -287,7 +289,7 @@ class OfflineService {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('authToken') : ''}`
       },
       body: item.action !== 'delete' ? JSON.stringify(item.data) : undefined
     });
@@ -309,7 +311,7 @@ class OfflineService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('authToken') : ''}`
       },
       body: JSON.stringify(item.data)
     });
@@ -361,7 +363,7 @@ class OfflineService {
     const response = await fetch('/api/photos/upload', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('authToken') : ''}`
       },
       body: formData
     });
@@ -503,7 +505,9 @@ class OfflineService {
   // Update settings
   updateSettings(newSettings: Partial<OfflineSettings>): void {
     this.settings = { ...this.settings, ...newSettings };
-    localStorage.setItem('offlineSettings', JSON.stringify(this.settings));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('offlineSettings', JSON.stringify(this.settings));
+    }
   }
 
   // Get current settings
