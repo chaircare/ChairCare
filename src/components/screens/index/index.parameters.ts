@@ -3,6 +3,6 @@ import { HomePageProps } from './index.models';
 
 export const getHome = ({ screenSize }: { screenSize: Size }): HomePageProps => ({
 	welcome: {
-		title: 'Template'
+		title: 'Chair Care'
 	}
 })

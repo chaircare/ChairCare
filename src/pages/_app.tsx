@@ -18,7 +18,7 @@ const triggerEventGTM = (event: any) => {
 	}
 };
 
-const TemplateApp = ({ Component, pageProps }: AppProps) => {
+const ChairCareApp = ({ Component, pageProps }: AppProps) => {
 	const isBrowser = typeof window !== 'undefined'
 
 	// hacky way to ensure page-tracking is called on initial page load:
@@ -43,20 +43,20 @@ const TemplateApp = ({ Component, pageProps }: AppProps) => {
 		try {
 			setTimeout(() => {
 				triggerEventGTM({
-					eventId: 'TemplatePageView',
+					eventId: 'ChairCarePageView',
 					info: {
 						pagePath: url,
-						event_label: 'TemplatePageView',
+						event_label: 'ChairCarePageView',
 						event_category: 'Page Statistics'
 					}
 				})
 			}, 100)
 			setTimeout(() => {
 				triggerEventGTM({
-					eventId: 'TemplateBouceTest5s',
+					eventId: 'ChairCareBounceTest5s',
 					info: {
 						pagePath: url,
-						event_label: 'TemplateBouceTest5s',
+						event_label: 'ChairCareBounceTest5s',
 						event_category: 'Page Statistics'
 					}
 				})
@@ -64,10 +64,10 @@ const TemplateApp = ({ Component, pageProps }: AppProps) => {
 
 			setTimeout(() => {
 				triggerEventGTM({
-					eventId: 'TemplateBouceTest20s',
+					eventId: 'ChairCareBounceTest20s',
 					info: {
 						pagePath: url,
-						event_label: 'TemplateBouceTest20s',
+						event_label: 'ChairCareBounceTest20s',
 						event_category: 'Page Statistics'
 					}
 				})
@@ -136,4 +136,4 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 	// console.log(metric)
 }
 
-export default TemplateApp;
+export default ChairCareApp;

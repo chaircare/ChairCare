@@ -14,8 +14,8 @@ export default feed;
 export const getServerSideProps = async ({ res }: Response) => {
 	const blogs: IBlogPost[] = await getBlog();
 
-	const title = 'Template Title';
-	const desc = 'The one-stop shop to design, develop and deploy your next digital project.';
+	const title = 'Chair Care - Professional Chair Maintenance Services';
+	const desc = 'Professional chair maintenance and repair services for offices and businesses.';
 
 	// encode &, <, >, " and '
 	const encodeXML = (data: string) =>

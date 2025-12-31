@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 import { useAuth } from 'contexts/AuthContext';
 import { useTheme } from 'contexts/ThemeContext';
@@ -337,7 +338,7 @@ const DashboardPage: NextPage = () => {
       
       // Calculate technician stats
       const totalJobs = jobsData.length;
-      const activeJobs = jobsData.filter(job => ['Scheduled', 'In Progress'].includes(job.status)).length;
+      const activeJobs = jobsData.filter(job => job.status && ['Scheduled', 'In Progress'].includes(job.status)).length;
       const completedJobs = jobsData.filter(job => job.status === 'Completed').length;
       
       setStats({
@@ -365,9 +366,15 @@ const DashboardPage: NextPage = () => {
 
   if (authLoading || loading) {
     return (
-      <Layout>
-        <LoadingContainer theme={theme}>Loading your dashboard...</LoadingContainer>
-      </Layout>
+      <>
+        <Head>
+          <title>Dashboard - Chair Care</title>
+          <meta name="description" content="Chair Care dashboard - manage your office chair maintenance and repair services" />
+        </Head>
+        <Layout>
+          <LoadingContainer theme={theme}>Loading your dashboard...</LoadingContainer>
+        </Layout>
+      </>
     );
   }
 
@@ -422,7 +429,12 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Dashboard - Chair Care</title>
+        <meta name="description" content="Chair Care dashboard - manage your office chair maintenance and repair services" />
+      </Head>
+      <Layout>
       {showHero && shouldShowFullHero() && (
         <HeroSection
           title={getHeroTitle()}
@@ -754,6 +766,7 @@ const DashboardPage: NextPage = () => {
       {/* Chatbot - only show for clients */}
       {user.role === 'client' && <ChatBot />}
     </Layout>
+    </>
   );
 };
 

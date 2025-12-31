@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 import { useAuth } from 'contexts/AuthContext';
 import { useTheme, ThemeToggle } from 'contexts/ThemeContext';
@@ -325,7 +326,12 @@ const LoginPage: NextPage = () => {
   };
 
   return (
-    <LoginContainer theme={theme}>
+    <>
+      <Head>
+        <title>Sign In - Chair Care</title>
+        <meta name="description" content="Sign in to your Chair Care account to manage your office chair maintenance and repair services" />
+      </Head>
+      <LoginContainer theme={theme}>
       <LoginContent theme={theme}>
         <ThemeToggleContainer theme={theme}>
           <ThemeToggle />
@@ -445,6 +451,7 @@ const LoginPage: NextPage = () => {
       
       <Footer />
     </LoginContainer>
+    </>
   );
 };
 

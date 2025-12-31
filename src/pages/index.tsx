@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import useWindowSize from 'hooks/useWindowSize';
 import { Layout } from 'components/ui/Layout';
 import { getHome, Welcome } from 'components/screens/index';
-import { defaultMetaTags } from 'parameters';
 import { useAuth } from 'contexts/AuthContext';
 
 
 interface ServerSideProps {}
 
-const IndexPage: NextPage<ServerSideProps> = (props: ServerSideProps) => {
+const IndexPage: NextPage<ServerSideProps> = () => {
 	const screenSize = useWindowSize();
 	const home = getHome({ screenSize });
 	const { isAuthenticated, loading } = useAuth();
@@ -28,18 +28,30 @@ const IndexPage: NextPage<ServerSideProps> = (props: ServerSideProps) => {
 
 	if (loading) {
 		return (
-			<Layout>
-				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-					Loading...
-				</div>
-			</Layout>
+			<>
+				<Head>
+					<title>Chair Care - Professional Chair Maintenance Services</title>
+					<meta name="description" content="Professional chair maintenance and repair services for offices and businesses" />
+				</Head>
+				<Layout>
+					<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+						Loading...
+					</div>
+				</Layout>
+			</>
 		);
 	}
 
 	return (
-		<Layout>
-			<Welcome title={home.welcome.title} />
-		</Layout>
+		<>
+			<Head>
+				<title>Chair Care - Professional Chair Maintenance Services</title>
+				<meta name="description" content="Professional chair maintenance and repair services for offices and businesses" />
+			</Head>
+			<Layout>
+				<Welcome title={home.welcome.title} />
+			</Layout>
+		</>
 	);
 };
 
