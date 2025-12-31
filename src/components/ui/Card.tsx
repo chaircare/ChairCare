@@ -18,11 +18,32 @@ const StyledCard = styled.div<CardProps>`
   ${({ padding = 'md' }) => {
     switch (padding) {
       case 'sm':
-        return `padding: ${theme.spacing.md};`;
+        return `
+          padding: ${theme.spacing.md};
+          @media (max-width: 768px) {
+            padding: ${theme.spacing.sm};
+          }
+        `;
       case 'lg':
-        return `padding: ${theme.spacing['2xl']};`;
+        return `
+          padding: ${theme.spacing['2xl']};
+          @media (max-width: 768px) {
+            padding: ${theme.spacing.xl};
+          }
+          @media (max-width: 480px) {
+            padding: ${theme.spacing.lg};
+          }
+        `;
       default:
-        return `padding: ${theme.spacing.xl};`;
+        return `
+          padding: ${theme.spacing.xl};
+          @media (max-width: 768px) {
+            padding: ${theme.spacing.lg};
+          }
+          @media (max-width: 480px) {
+            padding: ${theme.spacing.md};
+          }
+        `;
     }
   }}
   

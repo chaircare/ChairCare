@@ -45,7 +45,7 @@ export interface Chair {
   purchaseDate?: Date;
   clientId: string; // Owner of the chair (client ID)
   user?: User;
-  status: 'Pending Service' | 'Active' | 'In Progress' | 'In Workshop' | 'Completed' | 'Unrepairable' | 'Retired';
+  status: 'Pending Service' | 'Active' | 'In Progress' | 'In Workshop' | 'Completed' | 'Unrepairable' | 'Retired' | 'Inactive';
   serviceHistory: ChairServiceEntry[];
   totalServices: number;
   totalSpent: number;

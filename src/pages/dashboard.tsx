@@ -22,6 +22,19 @@ const StatsGrid = styled.div<{ theme: any }>`
   gap: ${props => props.theme.spacing['2xl']};
   margin-bottom: ${props => props.theme.spacing['3xl']};
   padding: 0 ${props => props.theme.spacing.xl};
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: ${props => props.theme.spacing.lg};
+    padding: 0 ${props => props.theme.spacing.md};
+    margin-bottom: ${props => props.theme.spacing.xl};
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: ${props => props.theme.spacing.md};
+    padding: 0;
+  }
 `;
 
 const StatCard = styled(Card)<{ theme: any }>`
@@ -64,6 +77,14 @@ const StatValue = styled.div<{ theme: any }>`
   margin-bottom: ${props => props.theme.spacing.md};
   font-family: ${props => props.theme.typography.fontFamily.sans.join(', ')};
   line-height: 1;
+  
+  @media (max-width: 768px) {
+    font-size: ${props => props.theme.typography.fontSize['4xl']};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: ${props => props.theme.typography.fontSize['3xl']};
+  }
 `;
 
 const StatLabel = styled.div<{ theme: any }>`
@@ -72,6 +93,14 @@ const StatLabel = styled.div<{ theme: any }>`
   font-weight: ${props => props.theme.typography.fontWeight.semibold};
   text-transform: uppercase;
   letter-spacing: ${props => props.theme.typography.letterSpacing.wide};
+  
+  @media (max-width: 768px) {
+    font-size: ${props => props.theme.typography.fontSize.base};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: ${props => props.theme.typography.fontSize.sm};
+  }
 `;
 
 const Section = styled(Card)<{ theme: any }>`
@@ -92,6 +121,12 @@ const SectionHeader = styled.div<{ theme: any }>`
   margin-bottom: ${props => props.theme.spacing.xl};
   padding-bottom: ${props => props.theme.spacing.lg};
   border-bottom: 1px solid ${props => props.theme.colors.border.primary};
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: ${props => props.theme.spacing.md};
+  }
 `;
 
 const SectionTitle = styled.h2<{ theme: any }>`
@@ -99,6 +134,14 @@ const SectionTitle = styled.h2<{ theme: any }>`
   font-size: ${props => props.theme.typography.fontSize['2xl']};
   font-weight: ${props => props.theme.typography.fontWeight.bold};
   color: ${props => props.theme.colors.text.primary};
+  
+  @media (max-width: 768px) {
+    font-size: ${props => props.theme.typography.fontSize.xl};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: ${props => props.theme.typography.fontSize.lg};
+  }
 `;
 
 const ItemsList = styled.div<{ theme: any }>`
@@ -127,6 +170,12 @@ const ItemCard = styled.div<{ theme: any }>`
     };
     box-shadow: ${props => props.theme.shadows.lg};
     transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: ${props => props.theme.spacing.md};
   }
 `;
 
@@ -186,13 +235,32 @@ const StatusBadge = styled.span<{ status: string; theme: any }>`
 `;
 
 const ActionButton = styled(Button)<{ theme: any }>`
-  margin-left: ${props => props.theme.spacing.md};
   border-radius: ${props => props.theme.borderRadius.full};
   font-weight: ${props => props.theme.typography.fontWeight.semibold};
   transition: all 0.3s ease;
   
   &:hover {
     transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const QuickActionsGrid = styled.div<{ theme: any }>`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: ${props => props.theme.spacing.md};
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${props => props.theme.spacing.sm};
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: ${props => props.theme.spacing.sm};
   }
 `;
 
@@ -435,145 +503,146 @@ const DashboardPage: NextPage = () => {
         <meta name="description" content="Chair Care dashboard - manage your office chair maintenance and repair services" />
       </Head>
       <Layout>
-      {showHero && shouldShowFullHero() && (
-        <HeroSection
-          title={getHeroTitle()}
-          subtitle={getWelcomeMessage()}
-          accentText={getHeroAccent()}
-          description={getHeroDescription()}
-          primaryAction={{
-            text: user.role === 'admin' ? 'View Calendar' : user.role === 'technician' ? 'Available Jobs' : 'Request Service',
-            onClick: () => {
-              setShowHero(false);
-              if (user.role === 'admin') router.push('/admin/calendar');
-              else if (user.role === 'technician') router.push('/technician/available-jobs');
-              else router.push('/scan');
-            }
-          }}
-          secondaryAction={{
-            text: user.role === 'admin' ? 'Manage Jobs' : 'View Analytics',
-            onClick: () => {
-              setShowHero(false);
-              if (user.role === 'admin') router.push('/admin/job-progress');
-            }
-          }}
-          showDecorative={true}
-        />
-      )}
+        {showHero && shouldShowFullHero() && (
+          <HeroSection
+            title={getHeroTitle()}
+            subtitle={getWelcomeMessage()}
+            accentText={getHeroAccent()}
+            description={getHeroDescription()}
+            primaryAction={{
+              text: user.role === 'admin' ? 'View Calendar' : user.role === 'technician' ? 'Available Jobs' : 'Request Service',
+              onClick: () => {
+                setShowHero(false);
+                if (user.role === 'admin') router.push('/admin/calendar');
+                else if (user.role === 'technician') router.push('/technician/available-jobs');
+                else router.push('/scan');
+              }
+            }}
+            secondaryAction={{
+              text: user.role === 'admin' ? 'Manage Jobs' : 'View Analytics',
+              onClick: () => {
+                setShowHero(false);
+                if (user.role === 'admin') router.push('/admin/job-progress');
+              }
+            }}
+            showDecorative={true}
+          />
+        )}
 
-      {showHero && !shouldShowFullHero() && (
-        <CompactHero
-          title={getHeroTitle()}
-          subtitle={getWelcomeMessage()}
-          accentText={getHeroAccent()}
-          primaryAction={{
-            text: user.role === 'admin' ? 'View Calendar' : 'Available Jobs',
-            onClick: () => {
-              setShowHero(false);
-              if (user.role === 'admin') router.push('/admin/calendar');
-              else router.push('/technician/available-jobs');
-            }
-          }}
-          secondaryAction={{
-            text: user.role === 'admin' ? 'Job Progress' : 'My Jobs',
-            onClick: () => {
-              setShowHero(false);
-              if (user.role === 'admin') router.push('/admin/job-progress');
-              else router.push('/dashboard');
-            }
-          }}
-        />
-      )}
+        {showHero && !shouldShowFullHero() && (
+          <CompactHero
+            title={getHeroTitle()}
+            subtitle={getWelcomeMessage()}
+            accentText={getHeroAccent()}
+            primaryAction={{
+              text: user.role === 'admin' ? 'View Calendar' : 'Available Jobs',
+              onClick: () => {
+                setShowHero(false);
+                if (user.role === 'admin') router.push('/admin/calendar');
+                else router.push('/technician/available-jobs');
+              }
+            }}
+            secondaryAction={{
+              text: user.role === 'admin' ? 'Job Progress' : 'My Jobs',
+              onClick: () => {
+                setShowHero(false);
+                if (user.role === 'admin') router.push('/admin/job-progress');
+                else router.push('/dashboard');
+              }
+            }}
+          />
+        )}
 
-      {!showHero && stats && (
-        <StatsGrid theme={theme}>
-          <StatCard theme={theme} hover>
-            <StatValue theme={theme}>{stats.totalChairs}</StatValue>
-            <StatLabel theme={theme}>{user.role === 'technician' ? 'Total Jobs' : 'Total Chairs'}</StatLabel>
-          </StatCard>
-          <StatCard theme={theme} hover>
-            <StatValue theme={theme}>{stats.pendingServices}</StatValue>
-            <StatLabel theme={theme}>{user.role === 'technician' ? 'Active Jobs' : 'Pending Services'}</StatLabel>
-          </StatCard>
-          <StatCard theme={theme} hover>
-            <StatValue theme={theme}>{stats.completedThisMonth}</StatValue>
-            <StatLabel theme={theme}>{user.role === 'technician' ? 'Completed Jobs' : 'Completed This Month'}</StatLabel>
-          </StatCard>
-          {user.role !== 'technician' && (
+        {!showHero && stats && (
+          <StatsGrid theme={theme}>
             <StatCard theme={theme} hover>
-              <StatValue theme={theme}>{formatCurrency(stats.totalRevenue)}</StatValue>
-              <StatLabel theme={theme}>Total Revenue</StatLabel>
+              <StatValue theme={theme}>{stats.totalChairs}</StatValue>
+              <StatLabel theme={theme}>{user.role === 'technician' ? 'Total Jobs' : 'Total Chairs'}</StatLabel>
             </StatCard>
-          )}
-        </StatsGrid>
-      )}
+            <StatCard theme={theme} hover>
+              <StatValue theme={theme}>{stats.pendingServices}</StatValue>
+              <StatLabel theme={theme}>{user.role === 'technician' ? 'Active Jobs' : 'Pending Services'}</StatLabel>
+            </StatCard>
+            <StatCard theme={theme} hover>
+              <StatValue theme={theme}>{stats.completedThisMonth}</StatValue>
+              <StatLabel theme={theme}>{user.role === 'technician' ? 'Completed Jobs' : 'Completed This Month'}</StatLabel>
+            </StatCard>
+            {user.role !== 'technician' && (
+              <StatCard theme={theme} hover>
+                <StatValue theme={theme}>{formatCurrency(stats.totalRevenue)}</StatValue>
+                <StatLabel theme={theme}>Total Revenue</StatLabel>
+              </StatCard>
+            )}
+          </StatsGrid>
+        )}
 
-      {/* Rest of dashboard content */}
-      {user.role === 'technician' ? (
-        // Technician Dashboard
-        <Section theme={theme}>
-          <SectionHeader theme={theme}>
-            <SectionTitle theme={theme}>My Assigned Jobs</SectionTitle>
-          </SectionHeader>
-          
-          {assignedJobs.length === 0 ? (
-            <EmptyState theme={theme}>
-              <h3>No Jobs Assigned</h3>
-              <p>You don't have any jobs assigned yet. Check back later or contact your supervisor.</p>
-            </EmptyState>
-          ) : (
-            <ItemsList theme={theme}>
-              {assignedJobs.map((job) => (
-                <ItemCard key={job.id} theme={theme}>
-                  <ItemInfo theme={theme}>
-                    <ItemTitle theme={theme}>
-                      Job #{job.jobId} - {job.clientName}
-                    </ItemTitle>
-                    <ItemDetails theme={theme}>
-                      📍 {job.location || 'Client site'}<br />
-                      📅 {job.scheduledDate ? formatDate(job.scheduledDate) : 'Not scheduled'} {job.scheduledTime || ''}<br />
-                      🔧 {job.jobType} • {job.chairs?.length || 0} chairs
-                    </ItemDetails>
-                  </ItemInfo>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: theme.spacing.sm, alignItems: 'flex-end' }}>
-                    <StatusBadge status={job.status.toLowerCase()} theme={theme}>
-                      {job.status}
-                    </StatusBadge>
-                    {job.status === 'Scheduled' && (
-                      <ActionButton
-                        theme={theme}
-                        variant="primary"
-                        size="sm"
-                        onClick={() => router.push(`/jobs/${job.id}/technician`)}
-                      >
-                        Start Job
-                      </ActionButton>
-                    )}
-                    {job.status === 'In Progress' && (
-                      <ActionButton
-                        theme={theme}
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => router.push(`/jobs/${job.id}/technician`)}
-                      >
-                        Continue Job
-                      </ActionButton>
-                    )}
-                  </div>
-                </ItemCard>
-              ))}
-            </ItemsList>
-          )}
-        </Section>
-      ) : (
-        // Admin/Client Dashboard
-        <>
-          {user.role === 'admin' && (
-            <>
-              <Section theme={theme}>
-                <SectionHeader theme={theme}>
-                  <SectionTitle theme={theme}>Quick Actions</SectionTitle>
-                  <div style={{ display: 'flex', gap: theme.spacing.md, flexWrap: 'wrap' }}>
+        {/* Rest of dashboard content */}
+        {user.role === 'technician' ? (
+          // Technician Dashboard
+          <Section theme={theme}>
+            <SectionHeader theme={theme}>
+              <SectionTitle theme={theme}>My Assigned Jobs</SectionTitle>
+            </SectionHeader>
+            
+            {assignedJobs.length === 0 ? (
+              <EmptyState theme={theme}>
+                <h3>No Jobs Assigned</h3>
+                <p>You don't have any jobs assigned yet. Check back later or contact your supervisor.</p>
+              </EmptyState>
+            ) : (
+              <ItemsList theme={theme}>
+                {assignedJobs.map((job) => (
+                  <ItemCard key={job.id} theme={theme}>
+                    <ItemInfo theme={theme}>
+                      <ItemTitle theme={theme}>
+                        Job #{job.jobId} - {job.clientName}
+                      </ItemTitle>
+                      <ItemDetails theme={theme}>
+                        📍 {job.location || 'Client site'}<br />
+                        📅 {job.scheduledDate ? formatDate(job.scheduledDate) : 'Not scheduled'} {job.scheduledTime || ''}<br />
+                        🔧 {job.jobType} • {job.chairs?.length || 0} chairs
+                      </ItemDetails>
+                    </ItemInfo>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: theme.spacing.sm, alignItems: 'flex-end' }}>
+                      <StatusBadge status={job.status.toLowerCase()} theme={theme}>
+                        {job.status}
+                      </StatusBadge>
+                      {job.status === 'Scheduled' && (
+                        <ActionButton
+                          theme={theme}
+                          variant="primary"
+                          size="sm"
+                          onClick={() => router.push(`/jobs/${job.id}/technician`)}
+                        >
+                          Start Job
+                        </ActionButton>
+                      )}
+                      {job.status === 'In Progress' && (
+                        <ActionButton
+                          theme={theme}
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => router.push(`/jobs/${job.id}/technician`)}
+                        >
+                          Continue Job
+                        </ActionButton>
+                      )}
+                    </div>
+                  </ItemCard>
+                ))}
+              </ItemsList>
+            )}
+          </Section>
+        ) : (
+          // Admin/Client Dashboard
+          <>
+            {user.role === 'admin' && (
+              <>
+                <Section theme={theme}>
+                  <SectionHeader theme={theme}>
+                    <SectionTitle theme={theme}>Quick Actions</SectionTitle>
+                  </SectionHeader>
+                  <QuickActionsGrid theme={theme}>
                     <ActionButton
                       theme={theme}
                       variant="outline"
@@ -622,150 +691,149 @@ const DashboardPage: NextPage = () => {
                     >
                       Job Progress
                     </ActionButton>
-                  </div>
-                </SectionHeader>
-              </Section>
+                  </QuickActionsGrid>
+                </Section>
 
-              <Section theme={theme}>
-                <SectionHeader theme={theme}>
-                  <SectionTitle theme={theme}>Pending Service Requests</SectionTitle>
+                <Section theme={theme}>
+                  <SectionHeader theme={theme}>
+                    <SectionTitle theme={theme}>Pending Service Requests</SectionTitle>
+                    <ActionButton
+                      theme={theme}
+                      variant="primary"
+                      size="sm"
+                      onClick={() => router.push('/admin/service-requests')}
+                    >
+                      View All
+                    </ActionButton>
+                  </SectionHeader>
+                  
+                  {pendingRequests.length === 0 ? (
+                    <EmptyState theme={theme}>
+                      <h3>No Pending Requests</h3>
+                      <p>All service requests have been processed.</p>
+                    </EmptyState>
+                  ) : (
+                    <ItemsList theme={theme}>
+                      {pendingRequests.slice(0, 5).map((request) => (
+                        <ItemCard key={request.id} theme={theme}>
+                          <ItemInfo theme={theme}>
+                            <ItemTitle theme={theme}>
+                              {request.chair?.chairId || 'Unknown Chair'} - {request.serviceType}
+                            </ItemTitle>
+                            <ItemDetails theme={theme}>
+                              📍 {request.chair?.location || 'Unknown location'}<br />
+                              📝 {request.description}<br />
+                              💰 R{request.cost?.toFixed(2) || '0.00'}
+                            </ItemDetails>
+                          </ItemInfo>
+                          <ActionButton
+                            theme={theme}
+                            variant="primary"
+                            size="sm"
+                            onClick={() => router.push('/admin/service-requests')}
+                          >
+                            Review
+                          </ActionButton>
+                        </ItemCard>
+                      ))}
+                    </ItemsList>
+                  )}
+                </Section>
+              </>
+            )}
+
+            <Section theme={theme}>
+              <SectionHeader theme={theme}>
+                <SectionTitle theme={theme}>My Chairs</SectionTitle>
+                <div style={{ display: 'flex', gap: theme.spacing.md, flexWrap: 'wrap' }}>
+                  <ActionButton
+                    theme={theme}
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => router.push('/chairs/qr-generator')}
+                  >
+                    View QR Codes
+                  </ActionButton>
                   <ActionButton
                     theme={theme}
                     variant="primary"
                     size="sm"
-                    onClick={() => router.push('/admin/service-requests')}
+                    onClick={() => router.push('/scan')}
                   >
-                    View All
+                    Request Service
                   </ActionButton>
-                </SectionHeader>
-                
-                {pendingRequests.length === 0 ? (
-                  <EmptyState theme={theme}>
-                    <h3>No Pending Requests</h3>
-                    <p>All service requests have been processed.</p>
-                  </EmptyState>
-                ) : (
-                  <ItemsList theme={theme}>
-                    {pendingRequests.slice(0, 5).map((request) => (
-                      <ItemCard key={request.id} theme={theme}>
-                        <ItemInfo theme={theme}>
-                          <ItemTitle theme={theme}>
-                            {request.chair?.chairId || 'Unknown Chair'} - {request.serviceType}
-                          </ItemTitle>
-                          <ItemDetails theme={theme}>
-                            📍 {request.chair?.location || 'Unknown location'}<br />
-                            📝 {request.description}<br />
-                            💰 R{request.cost?.toFixed(2) || '0.00'}
-                          </ItemDetails>
-                        </ItemInfo>
-                        <ActionButton
-                          theme={theme}
-                          variant="primary"
-                          size="sm"
-                          onClick={() => router.push('/admin/service-requests')}
-                        >
-                          Review
-                        </ActionButton>
-                      </ItemCard>
-                    ))}
-                  </ItemsList>
-                )}
-              </Section>
-            </>
-          )}
+                </div>
+              </SectionHeader>
+              
+              {chairs.length === 0 ? (
+                <EmptyState theme={theme}>
+                  <h3>No Chairs Registered</h3>
+                  <p>Get started by adding your first chair to the system.</p>
+                </EmptyState>
+              ) : (
+                <ItemsList theme={theme}>
+                  {chairs.slice(0, 10).map((chair) => (
+                    <ItemCard key={chair.id} theme={theme}>
+                      <ItemInfo theme={theme}>
+                        <ItemTitle theme={theme}>
+                          {chair.chairNumber} - {chair.model || 'Office Chair'}
+                        </ItemTitle>
+                        <ItemDetails theme={theme}>
+                          📍 {chair.location}<br />
+                          🏷️ QR Code: {chair.qrCode}
+                        </ItemDetails>
+                      </ItemInfo>
+                      <ActionButton
+                        theme={theme}
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => router.push(`/chairs/${chair.id}/history`)}
+                      >
+                        View History
+                      </ActionButton>
+                    </ItemCard>
+                  ))}
+                </ItemsList>
+              )}
+            </Section>
 
-          <Section theme={theme}>
-            <SectionHeader theme={theme}>
-              <SectionTitle theme={theme}>My Chairs</SectionTitle>
-              <div style={{ display: 'flex', gap: theme.spacing.md }}>
-                <ActionButton
-                  theme={theme}
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => router.push('/chairs/qr-generator')}
-                >
-                  View QR Codes
-                </ActionButton>
-                <ActionButton
-                  theme={theme}
-                  variant="primary"
-                  size="sm"
-                  onClick={() => router.push('/scan')}
-                >
-                  Request Service
-                </ActionButton>
-              </div>
-            </SectionHeader>
-            
-            {chairs.length === 0 ? (
-              <EmptyState theme={theme}>
-                <h3>No Chairs Registered</h3>
-                <p>Get started by adding your first chair to the system.</p>
-              </EmptyState>
-            ) : (
-              <ItemsList theme={theme}>
-                {chairs.slice(0, 10).map((chair) => (
-                  <ItemCard key={chair.id} theme={theme}>
-                    <ItemInfo theme={theme}>
-                      <ItemTitle theme={theme}>
-                        {chair.chairNumber} - {chair.model || 'Office Chair'}
-                      </ItemTitle>
-                      <ItemDetails theme={theme}>
-                        📍 {chair.location}<br />
-                        🏷️ QR Code: {chair.qrCode}
-                      </ItemDetails>
-                    </ItemInfo>
-                    <ActionButton
-                      theme={theme}
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => router.push(`/chairs/${chair.id}/history`)}
-                    >
-                      View History
-                    </ActionButton>
-                  </ItemCard>
-                ))}
-              </ItemsList>
-            )}
-          </Section>
+            <Section theme={theme}>
+              <SectionHeader theme={theme}>
+                <SectionTitle theme={theme}>Recent Service Activity</SectionTitle>
+              </SectionHeader>
+              
+              {serviceLogs.length === 0 ? (
+                <EmptyState theme={theme}>
+                  <h3>No Service History</h3>
+                  <p>Service requests will appear here once you start using the system.</p>
+                </EmptyState>
+              ) : (
+                <ItemsList theme={theme}>
+                  {serviceLogs.slice(0, 5).map((log) => (
+                    <ItemCard key={log.id} theme={theme}>
+                      <ItemInfo theme={theme}>
+                        <ItemTitle theme={theme}>
+                          {log.serviceType.toUpperCase()} - {log.chair?.chairNumber}
+                        </ItemTitle>
+                        <ItemDetails theme={theme}>
+                          {log.description}<br />
+                          💰 {formatCurrency(log.cost)} • 📅 {formatDate(log.createdAt)}
+                        </ItemDetails>
+                      </ItemInfo>
+                      <StatusBadge status={log.status} theme={theme}>
+                        {log.status}
+                      </StatusBadge>
+                    </ItemCard>
+                  ))}
+                </ItemsList>
+              )}
+            </Section>
+          </>
+        )}
 
-          <Section theme={theme}>
-            <SectionHeader theme={theme}>
-              <SectionTitle theme={theme}>Recent Service Activity</SectionTitle>
-            </SectionHeader>
-            
-            {serviceLogs.length === 0 ? (
-              <EmptyState theme={theme}>
-                <h3>No Service History</h3>
-                <p>Service requests will appear here once you start using the system.</p>
-              </EmptyState>
-            ) : (
-              <ItemsList theme={theme}>
-                {serviceLogs.slice(0, 5).map((log) => (
-                  <ItemCard key={log.id} theme={theme}>
-                    <ItemInfo theme={theme}>
-                      <ItemTitle theme={theme}>
-                        {log.serviceType.toUpperCase()} - {log.chair?.chairNumber}
-                      </ItemTitle>
-                      <ItemDetails theme={theme}>
-                        {log.description}<br />
-                        💰 {formatCurrency(log.cost)} • 📅 {formatDate(log.createdAt)}
-                      </ItemDetails>
-                    </ItemInfo>
-                    <StatusBadge status={log.status} theme={theme}>
-                      {log.status}
-                    </StatusBadge>
-                  </ItemCard>
-                ))}
-              </ItemsList>
-            )}
-          </Section>
-        </>
-      )}
-
-      {/* Chatbot - only show for clients */}
-      {user.role === 'client' && <ChatBot />}
-    </Layout>
+        {/* Chatbot - only show for clients */}
+        {user.role === 'client' && <ChatBot />}
+      </Layout>
     </>
   );
 };

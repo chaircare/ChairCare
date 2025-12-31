@@ -16,6 +16,11 @@ import apiClient from 'lib/api-client';
 const ChairsContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 ${theme.spacing.md};
+  
+  @media (max-width: 768px) {
+    padding: 0 ${theme.spacing.sm};
+  }
 `;
 
 const HeaderSection = styled(Card)`
@@ -37,6 +42,16 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: ${theme.spacing.lg};
   margin-bottom: ${theme.spacing['2xl']};
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: ${theme.spacing.sm};
+  }
 `;
 
 const StatCard = styled(Card)`
@@ -66,6 +81,11 @@ const FiltersGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: ${theme.spacing.md};
   align-items: end;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: ${theme.spacing.sm};
+  }
 `;
 
 const FilterGroup = styled.div`
@@ -110,6 +130,11 @@ const ChairsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: ${theme.spacing.lg};
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: ${theme.spacing.md};
+  }
 `;
 
 const ChairCard = styled(Card)`
@@ -174,6 +199,11 @@ const StatusBadge = styled.span<{ status: Chair['status'] }>`
           background: ${theme.colors.gray[100]};
           color: ${theme.colors.gray[700]};
         `;
+      case 'Inactive':
+        return `
+          background: ${theme.colors.gray[100]};
+          color: ${theme.colors.gray[700]};
+        `;
       default:
         return `
           background: ${theme.colors.gray[100]};
@@ -210,6 +240,12 @@ const ChairActions = styled.div`
   display: flex;
   gap: ${theme.spacing.sm};
   margin-top: ${theme.spacing.md};
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: ${theme.spacing.xs};
+  }
 `;
 
 const EmptyState = styled.div`
@@ -231,7 +267,8 @@ const ChairsPage: NextPage = () => {
     active: 0,
     inProgress: 0,
     pendingService: 0,
-    retired: 0
+    retired: 0,
+    inactive: 0
   });
 
   // Modal states
@@ -288,7 +325,8 @@ const ChairsPage: NextPage = () => {
         active: chairsData.filter(chair => chair.status === 'Active').length,
         inProgress: chairsData.filter(chair => chair.status === 'In Progress').length,
         pendingService: chairsData.filter(chair => chair.status === 'Pending Service').length,
-        retired: chairsData.filter(chair => chair.status === 'Retired').length
+        retired: chairsData.filter(chair => chair.status === 'Retired').length,
+        inactive: chairsData.filter(chair => chair.status === 'Inactive').length
       };
       
       setStats(newStats);
@@ -410,6 +448,10 @@ const ChairsPage: NextPage = () => {
             <StatValue>{stats.retired}</StatValue>
             <StatLabel>Retired</StatLabel>
           </StatCard>
+          <StatCard>
+            <StatValue>{stats.inactive}</StatValue>
+            <StatLabel>Inactive</StatLabel>
+          </StatCard>
         </StatsGrid>
 
         <FiltersSection>
@@ -427,6 +469,7 @@ const ChairsPage: NextPage = () => {
                 <option value="In Workshop">In Workshop</option>
                 <option value="Unrepairable">Unrepairable</option>
                 <option value="Retired">Retired</option>
+                <option value="Inactive">Inactive</option>
               </Select>
             </FilterGroup>
             <FilterGroup>

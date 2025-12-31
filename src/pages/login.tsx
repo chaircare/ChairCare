@@ -58,6 +58,14 @@ const LoginContent = styled.div<{ theme: any }>`
   justify-content: center;
   padding: ${props => props.theme.spacing.xl};
   position: relative;
+  
+  @media (max-width: 768px) {
+    padding: ${props => props.theme.spacing.lg} ${props => props.theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${props => props.theme.spacing.md};
+  }
 `;
 
 const ThemeToggleContainer = styled.div<{ theme: any }>`
@@ -94,6 +102,11 @@ const LoginCard = styled(Card)<{ theme: any }>`
     height: 4px;
     background: ${props => props.theme.gradients.accent};
     border-radius: ${props => props.theme.borderRadius['3xl']} ${props => props.theme.borderRadius['3xl']} 0 0;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 100%;
+    margin: 0 ${props => props.theme.spacing.sm};
   }
 `;
 

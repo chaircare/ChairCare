@@ -236,9 +236,14 @@ const WelcomeText = styled.span<{ theme: any }>`
 const MainContent = styled.main<{ theme: any }>`
   flex: 1;
   padding: ${props => props.theme.spacing.xl};
+  min-height: 0; /* Prevents flex item from overflowing */
   
   @media (max-width: 768px) {
     padding: ${props => props.theme.spacing.lg} ${props => props.theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.sm};
   }
 `;
 
